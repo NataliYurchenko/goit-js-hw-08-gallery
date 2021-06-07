@@ -1,8 +1,6 @@
 import images from './gallery-items.js';
 console.log(images);
 
-//Создание и рендер разметки по массиву данных и предоставленному шаблону.
-
 const galleryItem = images.map(image => {
     return `<li class='gallery__item'>
     <a
@@ -21,8 +19,7 @@ const galleryItem = images.map(image => {
 
 const refs = {
   galleryList: document.querySelector('.js-gallery'),
-  link: document.querySelector('.gallery__link'),
-  img: document.querySelector('.gallery__image'),
+  //img: document.querySelector('.gallery__image'),
   lightbox: document.querySelector('.js-lightbox'),
   imgLightbox: document.querySelector('.lightbox__image'),
   closeModalBtn: document.querySelector('[data-action="close-lightbox"]'),
@@ -30,44 +27,29 @@ const refs = {
 };
 
 refs.galleryList.innerHTML = galleryItem;
-console.log(galleryItem);
-//Реализация делегирования на галерее ul.js-gallery 
-//и получение url большого изображения.
 
 refs.galleryList.addEventListener('click', onImgClick);
+refs.closeModalBtn.addEventListener('click', onCloseBtnclick);
+refs.lightboxOverlay.addEventListener('click', onCloseBtnclick);
 
 function onImgClick(event) {
   event.preventDefault();
-  console.log(event.target.nodeName);
-  console.log(refs.img);
+
   if (event.target.nodeName !== 'IMG') {
     return;
   };
 
-  //Подмена значения атрибута src элемента img.lightbox__image.
-
   refs.imgLightbox.src =  event.target.dataset.source;
   refs.imgLightbox.alt = event.target.alt;
   
-  //Открытие модального окна по клику на элементе галереи.
-
   refs.lightbox.classList.add('is-open');
   window.addEventListener('keydown', onEscClick);
-
-
-
 };
-
-//Закрытие модального окна по клику на кнопку
-//button[data-action="close-lightbox"]
-
-refs.closeModalBtn.addEventListener('click', onCloseBtnclick);
 
 function onCloseBtnclick() {
   refs.lightbox.classList.remove('is-open');
   window.removeEventListener('keydown', onEscClick);
-
-
+  refs.imgLightbox.src = '';
 };
 
 function onEscClick(event) {
@@ -75,17 +57,6 @@ function onEscClick(event) {
     onCloseBtnclick();
   }
 };
-
-//Закрытие модального окна по клику на div.lightbox__overlay.
-
-  refs.lightboxOverlay.addEventListener('click', onCloseBtnclick);
-
-
-//Очистка значения атрибута src элемента img.lightbox__image. 
-//Это необходимо для того, чтобы при следующем открытии модального окна,
-//пока грузится изображение, мы не видели предыдущее.
-
-
 
 
 // <li class="gallery__item">
